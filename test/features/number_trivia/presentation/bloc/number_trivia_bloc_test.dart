@@ -98,8 +98,7 @@ void main() {
       () async {
         // arrange
         setUpMockInputConverterSuccess();
-        when(() => mockGetConcreteNumberTrivia(any()))
-            .thenAnswer((_) async => const Right(tNumberTrivia));
+        setUpMockGetConcreteTriviaSuccess();
         // act
         bloc.add(const GetTriviaForConcreteNumber(tNumberString));
         await untilCalled(() => mockGetConcreteNumberTrivia(any()));
@@ -114,8 +113,7 @@ void main() {
       () async {
         // arrange
         setUpMockInputConverterSuccess();
-        when(() => mockGetConcreteNumberTrivia(any()))
-            .thenAnswer((_) async => const Right(tNumberTrivia));
+        setUpMockGetConcreteTriviaSuccess();
         // assert later
         final expected = [
           Loading(),
@@ -167,12 +165,15 @@ void main() {
   group('GetTriviaForRandomNumber', () {
     const tNumberTrivia = NumberTrivia(number: 1, text: 'test trivia');
 
+    void setUpMockGetRandomTriviaSuccess() =>
+        when(() => mockGetRandomNumberTrivia(any()))
+            .thenAnswer((_) async => const Right(tNumberTrivia));
+
     test(
       'should get data from the random use case',
       () async {
         // arrange
-        when(() => mockGetRandomNumberTrivia(any()))
-            .thenAnswer((_) async => const Right(tNumberTrivia));
+        setUpMockGetRandomTriviaSuccess();
         // act
         bloc.add(GetTriviaForRandomNumber());
         await untilCalled(() => mockGetRandomNumberTrivia(any()));
@@ -185,8 +186,7 @@ void main() {
       'should emit [Loading, Loaded] when data is gotten successfully',
       () async {
         // arrange
-        when(() => mockGetRandomNumberTrivia(any()))
-            .thenAnswer((_) async => const Right(tNumberTrivia));
+        setUpMockGetRandomTriviaSuccess();
         // assert later
         final expected = [
           Loading(),
