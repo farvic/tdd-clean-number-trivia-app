@@ -23,7 +23,7 @@ void main() {
   test(
     'should get trivia for the number from the repository',
     () async {
-      // "On the fly" implementation of the Repository using the Mockito package.
+      // "On the fly" implementation of the Repository using the Mocktail package.
       // When getConcreteNumberTrivia is called with any argument, always answer with
       // the Right "side" of Either containing a test NumberTrivia object.
       when(() => mockNumberTriviaRepository.getConcreteNumberTrivia(any()))

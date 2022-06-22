@@ -15,11 +15,8 @@ void main() {
   late NumberTriviaRemoteDataSourceImpl dataSource;
   late MockHttpClient mockHttpClient;
 
-  setUpAll(() {
-    registerFallbackValue(Uri());
-  });
-
   setUp(() {
+    registerFallbackValue(Uri());
     mockHttpClient = MockHttpClient();
     dataSource = NumberTriviaRemoteDataSourceImpl(client: mockHttpClient);
   });

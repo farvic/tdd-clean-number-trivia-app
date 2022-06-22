@@ -29,11 +29,9 @@ void main() {
   const NumberTrivia tNumberTrivia = tNumberTriviaModel;
 
   //Registers a function to be run once before all tests.
-  setUpAll(() {
-    registerFallbackValue(tNumberTriviaModel);
-  });
 
   setUp(() {
+    registerFallbackValue(tNumberTriviaModel);
     mockRemoteDataSource = MockRemoteDataSource();
     mockLocalDataSource = MockLocalDataSource();
     mockNetworkInfo = MockNetworkInfo();

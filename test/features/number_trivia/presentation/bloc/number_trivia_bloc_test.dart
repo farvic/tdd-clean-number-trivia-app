@@ -27,12 +27,9 @@ void main() {
   late MockGetRandomNumberTrivia mockGetRandomNumberTrivia;
   late MockInputConverter mockInputConverter;
 
-  setUpAll(() {
+  setUp(() {
     registerFallbackValue(FakeParams());
     registerFallbackValue(FakeNoParams());
-  });
-
-  setUp(() {
     mockGetConcreteNumberTrivia = MockGetConcreteNumberTrivia();
     mockGetRandomNumberTrivia = MockGetRandomNumberTrivia();
     mockInputConverter = MockInputConverter();
