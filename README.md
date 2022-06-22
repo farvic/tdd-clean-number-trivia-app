@@ -85,7 +85,7 @@ Since the [data_connection_checker](https://pub.dev/packages/data_connection_che
 
 ## Uninitialized variables
 
-To avoid certain runtime errors, null safety requires you to declare non-nullable uninitialized variable with the `late` keyword to tell the program that the variable will be initialized later on. This change is present in all the test files, like this example at the beginning of [`get_concrete_number_trivia_test.dart`](https://github.com/farvic/tdd-clean-number-trivia-app/blob/main/test/features/number_trivia/domain/usecases/get_concrete_number_trivia_test.dart#L12-L18);
+To avoid certain runtime errors, null safety requires you to declare non-nullable uninitialized variable with the `late` keyword to tell the program that the variable will be initialized later on. This change is present in all the test files, like this example at the beginning of [`get_concrete_number_trivia_test.dart`](https://github.com/farvic/tdd-clean-number-trivia-app/blob/main/test/features/number_trivia/domain/usecases/get_concrete_number_trivia_test.dart#L12-L18):
 
 ```
   late GetConcreteNumberTrivia usecase;
@@ -99,7 +99,63 @@ To avoid certain runtime errors, null safety requires you to declare non-nullabl
 
 <br/>
 
-## I'm planning to update the readme to cover all the changes on the next few days.
+## Bloc streams and testing
+
+When testing for bloc states ([`number_trivia_bloc_test.dart`](https://github.com/farvic/tdd-clean-number-trivia-app/blob/main/test/features/number_trivia/presentation/bloc/number_trivia_bloc_test.dart)), you should send a `bloc.stream` instead of the actual `bloc` as the first argument when calling `expectLater`:
+
+```
+    test(
+      'should emit [Error] when the input is invalid',
+      () async {
+        // arrange
+        when(() => mockInputConverter.stringToUnsignedInteger(any()))
+            .thenReturn(Left(InvalidInputFailure()));
+        // assert later
+        final expected = [
+          Error(message: INVALID_INPUT_FAILURE_MESSAGE),
+        ];
+        expectLater(bloc.stream, emitsInOrder(expected));
+        // act
+        bloc.add(const GetTriviaForConcreteNumber(tNumberString));
+      },
+    );
+```
+
+<br>
+
+Instead of what's in the [original code](https://github.com/ResoCoder/flutter-tdd-clean-architecture-course/blob/6c5156142f0e0ed84023793a417bc5e1e60d7ac0/test/features/number_trivia/presentation/bloc/number_trivia_bloc_test.dart#L75). Additionally, you're not gonna need to provide the `Empty()` state as part of the expected states since it's already being tested right [before the other tests](https://github.com/farvic/tdd-clean-number-trivia-app/blob/dbabcb154ea13b0785a262be639439bca734bee8/test/features/number_trivia/presentation/bloc/number_trivia_bloc_test.dart#L44-L47).
+
+```
+  test('initialState should be Empty', () {
+    // assert
+    expect(bloc.initialState, equals(Empty()));
+  });
+```
+
+<br>
+
+## App theming
+
+Now the app theme is gonna be defined like this in the [`main.dart`](https://github.com/farvic/tdd-clean-number-trivia-app/blob/main/lib/main.dart):
+
+```
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Number Trivia',
+      theme: theme.copyWith(
+        colorScheme: theme.colorScheme.copyWith(
+          primary: Colors.green.shade800,
+          secondary: Colors.green.shade600,
+        ),
+      ),
+      home: const NumberTriviaPage(),
+    );
+  }
+```
+
+<br><br>
+
+I believe that the main changes were covered here. If there's anything left, feel free to contact me.
 
 <!--## Getting Started
 
